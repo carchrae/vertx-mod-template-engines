@@ -2,10 +2,15 @@
     "name": "vertx-template-dust",
     "description": "Vertx Template Module for dust.js",
     "version": "0.0.1",
+    "author": "Tom Carchrae",
     "private": false,
     "dependencies": {
 	"dustjs-linkedin"      : "2.0.3",
         "dustjs-helpers"      : "1.1.1"
     },
-    "author": "Tom Carchrae"
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/carchrae/vertx-mod-template-engines"
+    },
+    "readme": "Dust Template Module for Vert.io"
 }
