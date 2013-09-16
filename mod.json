@@ -1,0 +1,5 @@
+{
+	"main" : "main.js",
+	"worker" : true,
+	"auto-redeploy" : true
+}

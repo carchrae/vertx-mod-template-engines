@@ -1,0 +1,11 @@
+
+
+task install {
+  def proc = 'npm install'.execute()
+  proc.in.eachLine { line -> println line}
+  proc.err.eachLine { line -> println 'ERROR: '+line }
+  proc.waitFor()
+  if (proc.exitValue()!=0){
+    throw new RuntimeException('NPM dependency installation failed!')
+  }
+}
