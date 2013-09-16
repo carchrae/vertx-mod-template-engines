@@ -1,7 +1,7 @@
 {
 	"main" : "main.js",
 	"worker" : true,
-	"auto-redeploy" : true
+	"auto-redeploy" : true,
 	
 	"description":"Template rendering using JS templating engines (currently dust.js)",
 	"licenses": ["The Apache Software License Version 2.0"],
