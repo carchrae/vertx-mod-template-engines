@@ -1,6 +1,9 @@
 
+defaultTasks 'clean', 'modZip'
 
-task install {
+apply plugin: 'java'
+
+task installNodeModules {
   def proc = 'npm install'.execute()
   proc.in.eachLine { line -> println line}
   proc.err.eachLine { line -> println 'ERROR: '+line }
@@ -8,4 +11,18 @@ task install {
   if (proc.exitValue()!=0){
     throw new RuntimeException('NPM dependency installation failed!')
   }
+}
+
+
+task modZip( type: Zip, dependsOn: 'installNodeModules', description: 'Package the module .zip file') {
+	archiveName = "${modowner}-${modname}-${version}" + ".zip"
+    destinationDir buildDir
+    from fileTree(projectDir){
+		include '*.js'
+		include '*.json'
+		include 'dustjs-linkedin/*.js'
+		include 'node_modules/**/lib/*.js'
+		include 'node_modules/**/dist/*.js'
+	}
+	includeEmptyDirs false
 }
