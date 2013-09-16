@@ -96,7 +96,7 @@ function DustHandler(options) {
 		} catch (e) {
 			logError("compileHandler", m, e);
 			reply({
-				error : e.stack
+				error : "failed to compile " + m.name + ".  "  + e
 			});
 		}
 	}
@@ -120,10 +120,10 @@ function DustHandler(options) {
 			logDebug("rendering " + m.name);
 			dust.render(m.name, context, function(err, out) {
 				if (err) {
-					logError("render error from dust : " + err);
+					logError("" + err);
 					logError("caused by : " + JSON.stringify(m));
 					reply({
-						error : err
+						error : "" + err
 					});
 				} else {
 					reply({
@@ -132,10 +132,10 @@ function DustHandler(options) {
 				}
 			});
 		} catch (e) {
-			logDebug("error rendering " + m.name);
+			logDebug("error rendering " + m.name); 
 			logError("render", m, e);
 			reply({
-				error : "error rendering " + m.name + "" + (e + " " + e.stack)
+				error : "exception while rendering " + m.name + ".  " + e
 			});
 		}
 	}
