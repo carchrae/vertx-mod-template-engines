@@ -15,7 +15,7 @@ task installNodeModules {
 
 
 task modZip( type: Zip, dependsOn: 'installNodeModules', description: 'Package the module .zip file') {
-	archiveName = "${modowner}-${modname}-${version}" + ".zip"
+	archiveName = "${modname}-${version}" + ".zip"
     destinationDir buildDir
     from fileTree(projectDir){
 		include '*.js'
