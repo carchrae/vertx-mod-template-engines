@@ -33,14 +33,16 @@ function DustHandler(options) {
 	function makeContext(context) {
 		var contextType = Object.prototype.toString.call(context);
 		if (contextType === "[object Array]") {
-			logDebug("context is array, making context ");
 			var len = context.length, array = context;
+			logDebug("context is array " + len + ". making context ");
 			if (len == 0)
 				context = {};
 			else
 				context = dust.makeBase(array[0]);
-			for ( var i = 1; i < len; i++)
+			for ( var i = 0; i < len; i++){
 				context = context.push(array[i]);
+				logDebug("context push " +JSON.stringify(array[i]));
+			}
 		} else {
 			logDebug("context was " + contextType);
 		}
