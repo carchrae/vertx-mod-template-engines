@@ -10,14 +10,14 @@ var eb = vertx.eventBus;
 var engines = [ "dustjs-linkedin" ];
 
 var main = function() {
-	var handler;
+	var handler = undefined;
 	try {
 		if (config.engine == "dustjs-linkedin") {
 			var DustHandler = require('dustjs-linkedin');
 			handler = new DustHandler({
 				logger : logger,
 				eb : eb,
-//				version : config.version ? config.version : "2.0.3"
+			// version : config.version ? config.version : "2.0.3"
 			});
 		}
 	} catch (e) {
