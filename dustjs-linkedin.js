@@ -1,5 +1,5 @@
 function DustHandler(options) {
-	var logger = options.logger, eb = options.eb, version = options.version, dustPath = options.dustPath, helperVersion = options.helperVersion, dustHelpersPath = options.dustHelpersPath;
+	var logger = options.logger, eb = options.eb, version = options.version, dustPath = options.dustPath, helperVersion = options.helperVersion, dustHelpersPath = options.dustHelpersPath, debug = options.debug;
 	if (!logger || !eb)
 		throw Error("You must pass a logger and eb (eventBus)");
 
@@ -19,15 +19,15 @@ function DustHandler(options) {
 	else
 		dust = loadNodeFiles();
 
-	logger.debug("dust keys " + JSON.stringify(Object.keys(dust)));
 	function logError(method, msg, e) {
-		logger.error(method + " failed processing " + JSON.stringify(msg));
+		logger.error("error: " + method + (msg?" failed processing " + JSON.stringify(msg):""));
 		if (e && e.stack)
-			logger.error("with error: " + e + "\n" + e.stack);
+			logger.error("exception and stack: " + e + "\n" + e.stack);
 	}
 
 	function logDebug(msg) {
-		logger.debug(msg);
+		if (debug)
+			logger.debug(msg);
 	}
 
 	function makeContext(context) {
@@ -39,9 +39,9 @@ function DustHandler(options) {
 				context = {};
 			else
 				context = dust.makeBase(array[0]);
-			for ( var i = 0; i < len; i++){
+			for ( var i = 0; i < len; i++) {
 				context = context.push(array[i]);
-				logDebug("context push " +JSON.stringify(array[i]));
+				logDebug("context push " + JSON.stringify(array[i]));
 			}
 		} else {
 			logDebug("context was " + contextType);
@@ -90,7 +90,8 @@ function DustHandler(options) {
 			logDebug("compileHandler: " + JSON.stringify(m));
 			var compiled = dust.compile(m.source, m.name);
 			dust.loadSource(compiled);
-			logDebug("compileHandler finished");
+			logDebug("compileHandler: finished compiling and loading " + m.name
+					+ " => " + compiled);
 			reply({
 				success : true,
 				name : m.name
@@ -98,7 +99,7 @@ function DustHandler(options) {
 		} catch (e) {
 			logError("compileHandler", m, e);
 			reply({
-				error : "failed to compile " + m.name + ".  "  + e
+				error : "failed to compile " + m.name + ".  " + e
 			});
 		}
 	}
@@ -122,7 +123,7 @@ function DustHandler(options) {
 			logDebug("rendering " + m.name);
 			dust.render(m.name, context, function(err, out) {
 				if (err) {
-					logError("" + err);
+					logError("render error " + err);
 					logError("caused by : " + JSON.stringify(m));
 					reply({
 						error : "" + err
@@ -134,7 +135,7 @@ function DustHandler(options) {
 				}
 			});
 		} catch (e) {
-			logDebug("error rendering " + m.name); 
+			logDebug("error rendering " + m.name);
 			logError("render", m, e);
 			reply({
 				error : "exception while rendering " + m.name + ".  " + e
